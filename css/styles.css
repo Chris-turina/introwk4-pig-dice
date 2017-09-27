@@ -63,6 +63,7 @@ button[name=restart-button] {
 }
 
 .modal-content {
+  text-align: center;
   background-color: #eeac99;
 }
 

@@ -57,16 +57,26 @@ Die.prototype.roll = function() {
 }
 
 
+// UI logic
 function updatePlayerScore(player) {
   $("#player-" + player.id + "-score").text(player.totalScore);
 }
 
-function displayPlayerNames(player) {
-  $("#player-" + player.id + "-name").text(player.name);
+function displayPlayerNames(players) {
+  players.forEach(function(player) {
+    $("#player-" + player.id + "-name").text(player.name);
+  });
 }
 
+function displayGame() {
+  $("#player-1-score").text(0);
+  $("#player-2-score").text(0);
+  $("#round-score").text(0);
+  $("#current-roll").text("-");
+  $("#game").slideDown();
+  $("#intro").slideUp();
+}
 
-// UI logic
 $(document).ready(function() {
   $("button[name=start-button]").click(function() {
     var players = [];
@@ -74,40 +84,29 @@ $(document).ready(function() {
     var player2Name = $("#player-2-name-input").val();
 
     if (player1Name === "" || player2Name === "") {
-      // Invalid player name
+      $("#invalid-name-modal").modal("show");
     }
     else {
-      $("#player-1-score").text(0);
-      $("#player-2-score").text(0);
-      $("#round-score").text(0);
-      $("#current-roll").text("-");
-      $("#game").slideDown();
-      $("#intro").slideUp();
-
+      displayGame();
       players.push(new Player(1, player1Name));
       players.push(new Player(2, player2Name));
-
       var game = new Game(players);
-      game.players.forEach(function(player) {
-        displayPlayerNames(player);
-      });
-
+      displayPlayerNames(players);
       $("#current-player").text(game.currentPlayer.name);
 
+      // Roll function
       $("button[name=roll-button]").click(function() {
         var rollingPlayer = game.currentPlayer
         var currentRoll = game.currentPlayerRoll();
-
         if (currentRoll === 1) {
-          $("#rolledOneModal").modal("show");
+          $("#rolled-one-modal").modal("show");
         }
-
         $("#round-score").text(rollingPlayer.currentScore);
         $("#current-roll").text(currentRoll);
-        updatePlayerScore(rollingPlayer);
         $("#current-player").text(game.currentPlayer.name);
       });
 
+      // Hold function
       $("button[name=hold-button]").click(function() {
         var rollingPlayer = game.currentPlayer;
         game.currentPlayerHold();
@@ -124,7 +123,6 @@ $(document).ready(function() {
           $("#current-player").text(game.currentPlayer.name);
         }
       });
-
       $("button[name=restart-button]").click(function() {
         location.reload(true);
       });
