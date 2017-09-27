@@ -1,3 +1,30 @@
+// Game constructor and methods
+function Game(numberOfPlayers) {
+  this.die = new Die(6);
+
+  this.players = [];
+  for (var i = 0; i < numberOfPlayers; i++) {
+    this.players.push(new Player);
+  }
+
+  this.currentPlayer = this.players[0];
+}
+
+Game.prototype.currentPlayerRoll = function() {
+  var currentRoll = this.die.roll();
+  if (currentRoll === 1) {
+    this.currentPlayer.currentScore = 0;
+  }
+  else {
+    this.currentPlayer.currentScore += currentRoll;
+  }
+  return currentRoll;
+}
+
+Game.prototype.currentPlayerHold = function() {
+
+}
+
 // Player constructor and methods
 function Player() {
   this.totalScore = 0;
@@ -15,22 +42,12 @@ Die.prototype.roll = function() {
 
 // UI logic
 $(document).ready(function() {
-  var die = new Die(6)
-  var currentRoll;
-
-  var player = new Player();
+  var game = new Game(1);
 
   $("button[name=roll-button]").click(function() {
-    currentRoll = die.roll();
-    if (currentRoll === 1) {
-      player.currentScore = 0;
-    }
-    else {
-      player.currentScore += currentRoll;
-    }
+    var currentRoll = game.currentPlayerRoll();
 
-
-    $("#round-score").text(player.currentScore);
+    $("#round-score").text(game.currentPlayer.currentScore);
     $("#current-roll").text(currentRoll);
   });
 });
