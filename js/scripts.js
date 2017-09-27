@@ -62,36 +62,53 @@ function displayPlayerNames(player) {
 
 // UI logic
 $(document).ready(function() {
-  var players = [];
   $("button[name=start-button]").click(function() {
+    var players = [];
     var player1Name = $("#player-1-name-input").val();
     var player2Name = $("#player-2-name-input").val();
-    players.push(new Player(1, player1Name));
-    players.push(new Player(2, player2Name));
 
-    var game = new Game(players);
-    game.players.forEach(function(player) {
-      displayPlayerNames(player);
-    });
+    if (player1Name === "" || player2Name === "") {
+      // Invalid player name
+    }
+    else {
+      $("#game").slideDown();
+      $("#intro").slideUp();
 
-    $("button[name=roll-button]").click(function() {
-      var rollingPlayer = game.currentPlayer
-      var currentRoll = game.currentPlayerRoll();
+      players.push(new Player(1, player1Name));
+      players.push(new Player(2, player2Name));
 
-      $("#round-score").text(rollingPlayer.currentScore);
-      $("#current-roll").text(currentRoll);
-      updatePlayerScore(rollingPlayer);
-      $("#current-player").text(game.currentPlayer.id);
-    });
+      var game = new Game(players);
+      game.players.forEach(function(player) {
+        displayPlayerNames(player);
+      });
 
-    $("button[name=hold-button]").click(function() {
-      var rollingPlayer = game.currentPlayer
-      game.currentPlayerHold();
+      $("button[name=roll-button]").click(function() {
+        var rollingPlayer = game.currentPlayer
+        var currentRoll = game.currentPlayerRoll();
 
-      $("#round-score").text("");
-      $("#current-roll").text("");
-      updatePlayerScore(rollingPlayer);
-      $("#current-player").text(game.currentPlayer.id);
-    });
+        if (currentRoll === 1) {
+          $("#myModal").modal("show");
+        }
+
+        $("#round-score").text(rollingPlayer.currentScore);
+        $("#current-roll").text(currentRoll);
+        updatePlayerScore(rollingPlayer);
+        $("#current-player").text(game.currentPlayer.name);
+      });
+
+      $("button[name=hold-button]").click(function() {
+        var rollingPlayer = game.currentPlayer
+        game.currentPlayerHold();
+
+        $("#round-score").text("");
+        $("#current-roll").text("");
+        updatePlayerScore(rollingPlayer);
+        $("#current-player").text(game.currentPlayer.name);
+      });
+
+      $("button[name=restart-button]").click(function() {
+        location.reload(true);
+      });
+    }
   });
 });
