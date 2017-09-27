@@ -68,11 +68,19 @@ function displayPlayerNames(players) {
   });
 }
 
-function displayGame() {
+function initializeScores() {
   $("#player-1-score").text(0);
   $("#player-2-score").text(0);
+}
+
+function resetCurrentRound() {
   $("#round-score").text(0);
   $("#current-roll").text("-");
+}
+
+function displayGame() {
+  initializeScores();
+  resetCurrentRound();
   $("#game").slideDown();
   $("#intro").slideUp();
 }
@@ -100,10 +108,13 @@ $(document).ready(function() {
         var currentRoll = game.currentPlayerRoll();
         if (currentRoll === 1) {
           $("#rolled-one-modal").modal("show");
+          resetCurrentRound();
+          $("#current-player").text(game.currentPlayer.name);
         }
-        $("#round-score").text(rollingPlayer.currentScore);
-        $("#current-roll").text(currentRoll);
-        $("#current-player").text(game.currentPlayer.name);
+        else {
+          $("#round-score").text(rollingPlayer.currentScore);
+          $("#current-roll").text(currentRoll);
+        }
       });
 
       // Hold function
@@ -117,8 +128,7 @@ $(document).ready(function() {
           $("#win").slideDown();
         }
         else {
-          $("#round-score").text("0");
-          $("#current-roll").text("-");
+          resetCurrentRound();
           updatePlayerScore(rollingPlayer);
           $("#current-player").text(game.currentPlayer.name);
         }
