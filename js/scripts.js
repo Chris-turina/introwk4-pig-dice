@@ -1,15 +1,11 @@
 // Game constructor and methods
-function Game(numberOfPlayers) {
-  this.die = new Die(6);
-
-  this.players = [];
-  for (var i = 0; i < numberOfPlayers; i++) {
-    this.players.push(new Player(i));
-  }
-
-  this.numberOfPlayers = numberOfPlayers;
+function Game(players) {
+  this.players = players;
+  this.numberOfPlayers = players.length;
   this.currentPlayerIndex = 0;
   this.currentPlayer = this.players[this.currentPlayerIndex];
+
+  this.die = new Die(6);
 }
 
 Game.prototype.currentPlayerRoll = function() {
@@ -59,34 +55,43 @@ function updatePlayerScore(player) {
 }
 
 function displayPlayerNames(player) {
-  $("#player-" + player.id + "-name").text(player.id);
+  console.log(player.id);
+  $("#player-" + player.id + "-name").text(player.name);
 }
 
 
 // UI logic
 $(document).ready(function() {
-  var game = new Game(2);
-  game.players.forEach(function(player) {
-    displayPlayerNames(player);
-  });
+  var players = [];
+  $("button[name=start-button]").click(function() {
+    var player1Name = $("#player-1-name-input").val();
+    var player2Name = $("#player-2-name-input").val();
+    players.push(new Player(1, player1Name));
+    players.push(new Player(2, player2Name));
 
-  $("button[name=roll-button]").click(function() {
-    var rollingPlayer = game.currentPlayer
-    var currentRoll = game.currentPlayerRoll();
+    var game = new Game(players);
+    game.players.forEach(function(player) {
+      displayPlayerNames(player);
+    });
 
-    $("#round-score").text(rollingPlayer.currentScore);
-    $("#current-roll").text(currentRoll);
-    updatePlayerScore(rollingPlayer);
-    $("#current-player").text(game.currentPlayer.id);
-  });
+    $("button[name=roll-button]").click(function() {
+      var rollingPlayer = game.currentPlayer
+      var currentRoll = game.currentPlayerRoll();
 
-  $("button[name=hold-button]").click(function() {
-    var rollingPlayer = game.currentPlayer
-    game.currentPlayerHold();
+      $("#round-score").text(rollingPlayer.currentScore);
+      $("#current-roll").text(currentRoll);
+      updatePlayerScore(rollingPlayer);
+      $("#current-player").text(game.currentPlayer.id);
+    });
 
-    $("#round-score").text("");
-    $("#current-roll").text("");
-    updatePlayerScore(rollingPlayer);
-    $("#current-player").text(game.currentPlayer.id);
+    $("button[name=hold-button]").click(function() {
+      var rollingPlayer = game.currentPlayer
+      game.currentPlayerHold();
+
+      $("#round-score").text("");
+      $("#current-roll").text("");
+      updatePlayerScore(rollingPlayer);
+      $("#current-player").text(game.currentPlayer.id);
+    });
   });
 });
