@@ -1,3 +1,59 @@
-#game {
+#game,
+#win {
   display: none;
+}
+
+body {
+  background-color: #f9d5e5;
+  color: #c83349;
+}
+
+.jumbotron,
+.well {
+  background-color: #eeac99;
+}
+
+#heading1 {
+  text-align: center;
+}
+
+.centered {
+  text-align: center;
+}
+
+.bordered {
+  border: 5px solid black;
+}
+
+ol {
+  text-align: left;
+}
+
+button {
+  color: #89168e;
+  background-color: #c15bc6;
+}
+
+.btn-start {
+  display: block;
+  margin: auto;
+  width: 200px;
+  margin-top: 30px;
+}
+
+.player-name {
+  font-size: 30px;
+  text-decoration: underline;
+}
+
+.player-score {
+  font-size: 100px;
+}
+
+#win img {
+  text-align: center;
+}
+
+button[name=restart-button] {
+  font-size: 20px;
 }
